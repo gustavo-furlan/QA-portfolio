@@ -1,0 +1,11 @@
+{
+    "name": "api-playwright-tests",
+    "version": "1.0.0",
+    "description": "API tests using Playwright",
+    "scripts": {
+        "test": "playwright test --reporter=html > test-results.html"
+    },
+    "devDependencies": {
+        "@playwright/test": "^1.0.0"
+    }
+}

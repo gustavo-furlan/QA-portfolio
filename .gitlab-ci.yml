@@ -1,0 +1,55 @@
+stages:
+  - install
+  - test
+
+variables:
+  NODE_ENV: 'test'
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - npm install
+
+install_dependencies:
+  stage: install
+  script:
+    - npm install
+
+api_tests:
+  stage: test
+  script:
+    - npx playwright test api-test/teste.spec.js
+  artifacts:
+    paths:
+      - playwright-report/
+  only:
+    - branches
+
+e2e_tests:
+  stage: test
+  script:
+    - npx playwright test e2e-test/e2e-first-test.spec.js
+    - npx playwright test e2e-test/e2e-second-test.spec.js
+  artifacts:
+    paths:
+      - playwright-report/
+  only:
+    - branches
+
+mobile_tests:
+  stage: test
+  image: mcr.microsoft.com/playwright:v1.16.3-focal
+  services:
+    - name: appium/appium
+      alias: appium
+  variables:
+    APPIUM_HOST: appium
+    APPIUM_PORT: 4723
+  script:
+    - npm install -g appium
+    - appium &
+    - node mobile-test/second-mobile-test.spec.js
+  only:
+    - branches
